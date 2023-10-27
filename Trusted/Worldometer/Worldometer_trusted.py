@@ -11,10 +11,18 @@ from sklearn.impute._iterative import IterativeImputer
 def has_more_than_N_missing(group, column, N):
         return group[column].isna().sum() > N
 
-def Worldometer_trusted():
+def Worldometer_trusted(filepath):
     conn = duckdb.connect()
-    worldometer_complete = conn.execute("""SELECT * FROM read_csv_auto(['/Users/maxtico/Documents/Master Data Science/ADSDB/ADSDB_Project/worldometer_v1.csv',
-    '/Users/maxtico/Documents/Master Data Science/ADSDB/ADSDB_Project/worldometer_v2.csv'], union_by_name=true)""").df()
+    file_list = os.listdir(filepath)
+    # Initialize dataframes to store the data
+    world_dataframes = ''
+    for file in file_list:
+        if file.endswith(".csv"):
+            if "Worldometer_joined" in file:
+                world_dataframes=file
+
+    worldometer_complete = conn.execute(f"SELECT * FROM read_csv_auto(['{filepath}{world_dataframes}'])").df()
+    
     data = worldometer_complete
     #Furthermore, we delete columns which can be easily constructed in the Feature engineering step:  'Tot Cases/1M pop', 'Deaths/1M pop', 'Tests/1M pop'
     data = data.drop(["NewCases", 'NewDeaths', 'NewRecovered','Serious,Critical', 'Tot Cases/1M pop', 'Deaths/1M pop', 'Tests/1M pop' ], axis = 1)#, ])
@@ -92,6 +100,5 @@ def Worldometer_trusted():
     # Concatenate the imputed DataFrames back into one final DataFrame
     imputed_df = pd.concat(imputed_dataframes, ignore_index=True)
     
-    imputed_df.to_csv('/Users/maxtico/Documents/Master Data Science/ADSDB/ADSDB_Project/Trusted/Worldometer/worldometer_preprocessed.csv')
-
-Worldometer_trusted()
+    output_file = os.path.join(filepath, 'Worldometer_preprocessed.csv')
+    imputed_df.to_csv(output_file)
