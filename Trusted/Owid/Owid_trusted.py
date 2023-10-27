@@ -5,6 +5,7 @@ import time
 import os
 import matplotlib
 from sklearn.impute._iterative import IterativeImputer
+from sklearn.ensemble import IsolationForest
 
 # Define a function to calculate the percentage of missing values
 def percentage_missing_values(group):
@@ -74,6 +75,24 @@ def Owid_trusted(filepath):
     new_dt[['total_cases','total_deaths','median_age', 'female_smokers', 'male_smokers', 'life_expectancy',
            'total_vaccinations', 'new_vaccinations', 'people_vaccinated',
            'human_development_index']] = num_imp
+    
+    # Outlier detection
+    model = IsolationForest(contamination=0.004, random_state=42)  # You can set a random seed for reproducibility.
+    grouped = new_dt.groupby('location')
+    dataframes = []
+    columns = ['total_cases', 'total_deaths', 'new_vaccinations', 'total_vaccinations', 'people_vaccinated']
+    # Iterate through each group (country)
+    for column in columns:
+      for name, group in grouped:
+        model.fit(group[[column]])
+        group[f'outliers_{column}'] = model.predict(group[[column]])
+
+        # Convert -1 to 'yes' and 1 to 'no'
+        group[f'outliers_{column}'] = group[f'outliers_{column}'].apply(lambda x: 'yes' if x == -1 else 'no')
+        dataframes.append(group)
+    # Concatenate the imputed DataFrames back into one final DataFrame
+    data_outliers = pd.concat(dataframes, ignore_index=True)
 
     output_file = os.path.join(filepath, 'Owid_preprocessed.csv')
     new_dt.to_csv(output_file)  # or True?
+
