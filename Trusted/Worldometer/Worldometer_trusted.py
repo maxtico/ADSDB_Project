@@ -5,7 +5,7 @@ import time
 import os
 import matplotlib
 import numpy as np
-from sklearn.impute._iterative import IterativeImputer
+from sklearn.ensemble import IsolationForest
 
 # Function to check if a group has more than a specified number of missing values for a given column
 def has_more_than_N_missing(group, column, N):
@@ -100,5 +100,24 @@ def Worldometer_trusted(filepath):
     # Concatenate the imputed DataFrames back into one final DataFrame
     imputed_df = pd.concat(imputed_dataframes, ignore_index=True)
     
+    model = IsolationForest(contamination=0.004, random_state=42)  # You can set a random seed for reproducibility.
+
+    grouped = imputed_df.groupby('Country,Other')
+    dataframes = []
+    columns = ['TotalCases', 'TotalDeaths', 'TotalRecovered', 'ActiveCases', 'TotalTests']
+    # Iterate through each group (country)
+    for column in columns:
+        for name, group in grouped:
+            model.fit(group[[column]])
+            group[f'outliers_{column}'] = model.predict(group[[column]])
+
+        # Convert -1 to 'yes' and 1 to 'no'
+        group[f'outliers_{column}'] = group[f'outliers_{column}'].apply(lambda x: 'yes' if x == -1 else 'no')
+        dataframes.append(group)
+
+    # Concatenate the imputed DataFrames back into one final DataFrame
+    data_outliers = pd.concat(dataframes, ignore_index=True)
+
     output_file = os.path.join(filepath, 'Worldometer_preprocessed.csv')
     imputed_df.to_csv(output_file)
+
