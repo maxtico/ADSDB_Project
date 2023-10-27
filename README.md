@@ -17,5 +17,11 @@ These are the requisites for running this code:
 * Numpy version: 1.26.0
 * Sklearn version: 0.0.post10
 
+## Usage
+To execute Operations.py:
+```
+python Operations.py
+```
+
 ## Authors
 The authors of this project are: Julian Fransen & Max Ticó
