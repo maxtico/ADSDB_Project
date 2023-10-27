@@ -18,6 +18,11 @@ These are the requisites for running this code:
 * Sklearn version: 0.0.post10
 
 ## Usage
+First we need to install the main packages that this repository uses:
+```
+pip install -r requirements.txt
+```
+
 To execute Operations.py:
 ```
 python Operations.py
