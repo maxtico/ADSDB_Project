@@ -23,7 +23,7 @@ def main():
         Owid_trusted(destination_folder)
         print('\n.....Performing quality analysis & treating missing data for Worldometer dataset.....')
         Worldometer_trusted(destination_folder)
-    print('\n.....Executing Exploitation zone.....')
+    print('\n.....Executing Exploitation zone.....\n')
     Exploitation(destination_folder)
 
 if __name__ == "__main__":
