@@ -4,7 +4,9 @@ from DataManagementBackbone.Trusted.Owid.Owid_trusted import Owid_trusted
 from DataManagementBackbone.Trusted.Worldometer.Worldometer_trusted import Worldometer_trusted
 from DataManagementBackbone.Exploitation.Exploitation import Exploitation
 from DataAnalysisBackbone.AnalyticalSandbox.Analytical_sandbox import Sandbox
+from DataAnalysisBackbone.AnalyticalSandbox.Analytical_sandbox_Profiling import Sandbox_profiling
 from DataAnalysisBackbone.FeatureGeneration.Feature_generation import Feature_generation
+from DataAnalysisBackbone.FeatureGeneration.Feature_generation_profiling import Feature_generation_profiling
 from DataAnalysisBackbone.ModelTraining.Model_training import Model
 from DataAnalysisBackbone.Model_deployment.Model_deployment import Deployment
 from AdvancedTopic.Landing.Persistent_AT import Persistent_AT
@@ -41,9 +43,13 @@ def main():
     print('\n.....Executing Analytical Sandbox.....')
     sand_dir = rel_path+"/DataAnalysisBackbone/AnalyticalSandbox/"
     Sandbox(exp_folder,sand_dir)
+    print('\n.....Executing Analytical Sandbox Profiling.....')
+    Sandbox_profiling(sand_dir)
     print('\n.....Executing Feature Generation.....')
     feat_dir = rel_path+"/DataAnalysisBackbone/FeatureGeneration/"
     Feature_generation(sand_dir,feat_dir)
+    print('\n.....Executing Feature Generation Profiling.....')
+    Feature_generation_profiling(feat_dir)
     print('\n.....Creating Models.....\n')
     model_path = rel_path+'/DataAnalysisBackbone/ModelTraining/Models/'
     with warnings.catch_warnings():
