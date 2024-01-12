@@ -7,9 +7,10 @@ import numpy as np
 import joblib
 
 def Deployment(filepath):
+    model_files = os.listdir(filepath)
     # Print the available models to the user
     print("Available Models:")
-    for i, filename in enumerate(filepath, start=1):
+    for i, filename in enumerate(model_files, start=1):
         print(f"{i}. {filename}")
 
 
@@ -21,14 +22,14 @@ def Deployment(filepath):
         print("Invalid input. Please enter a number between 1 and 6.")
         exit()
 
-    if 1 <= model_number <= len(filepath):
+    if 1 <= model_number <= len(model_files):
         # Construct the full path based on the selected model number
-        selected_model_path = os.path.join(filepath, filepath[model_number - 1])
+        selected_model_path = os.path.join(filepath, model_files[model_number - 1])
 
         # Load the selected model
         selected_model = joblib.load(selected_model_path)
 
-        print(f"Selected model '{filepath[model_number - 1]}' loaded successfully.")
+        print(f"Selected model '{model_files[model_number - 1]}' loaded successfully.")
 
     else:
         print("Invalid input. Please enter a number between 1 and 6.")
