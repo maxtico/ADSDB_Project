@@ -18,13 +18,11 @@ def Model(filepath,model_path):
     # Feature gen 1
     con = duckdb.connect(database= os.path.join(filepath, 'feature_generation1.duckdb'), read_only=False)
     data1 = con.execute("SELECT * FROM Generated_features1").df()
-    print(data1)
     con.close()
 
     # Feature gen 2
     con = duckdb.connect(database= os.path.join(filepath, 'feature_generation2.duckdb'), read_only=False)
     data2 = con.execute("SELECT * FROM Generated_features2").df()
-    print(data2)
     con.close()
 
     # RANDOM FOREST MODELLING
