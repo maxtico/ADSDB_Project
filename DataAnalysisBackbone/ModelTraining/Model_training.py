@@ -161,7 +161,7 @@ def Model(filepath,model_path):
     mse1 = mean_squared_error(y1, y_pred1)
     print(f'Best Model Mean Squared Error SVM 1: {mse1}')
     model_config = best_estimator.get_params()
-    joblib.dump(model_config, model_path+'Neural_network_fg1.joblib')
+    joblib.dump(model_config, model_path+'SVM_fg1.joblib')
 
     # Feat gen 2
     #SVR on data2
@@ -178,7 +178,7 @@ def Model(filepath,model_path):
     mse = mean_squared_error(y2, y_pred2)
     print(f'Best Model Mean Squared Error SVM2: {mse}')
     model_config = best_estimator.get_params()
-    joblib.dump(model_config, model_path+'Neural_network_fg1.joblib')
+    joblib.dump(model_config, model_path+'SVM_fg2.joblib')
 
 '''
 rel_path = os.path.dirname(os.path.abspath(__name__))
